@@ -11,9 +11,7 @@ def init_weights(m):
 
 
 class TranslationField(nn.Module):
-    def __init__(self, D=6, W=128,
-                in_channels_w=8, in_channels_xyz=34,
-                skips=[4]):
+    def __init__(self, D=6, W=128, in_channels_w=8, in_channels_xyz=34, skips=[4]):
         """
         D: number of layers for density (sigma) encoder
         W: number of hidden units in each layer
@@ -32,9 +30,9 @@ class TranslationField(nn.Module):
         # encoding layers
         for i in range(D):
             if i == 0:
-                layer = nn.Linear(in_channels_xyz+self.in_channels_w, W)
+                layer = nn.Linear(in_channels_xyz + self.in_channels_w, W)
             elif i in skips:
-                layer = nn.Linear(W+in_channels_xyz+self.in_channels_w, W)
+                layer = nn.Linear(W + in_channels_xyz + self.in_channels_w, W)
             else:
                 layer = nn.Linear(W, W)
             init_weights(layer)
@@ -81,12 +79,12 @@ class Embedding(nn.Module):
         self.identity = identity
         self.in_channels = in_channels
         self.funcs = [torch.sin, torch.cos]
-        self.out_channels = in_channels*(len(self.funcs)*N_freqs+1)
+        self.out_channels = in_channels * (len(self.funcs) * N_freqs + 1)
 
         if logscale:
-            self.freq_bands = 2**torch.linspace(0, N_freqs-1, N_freqs)
+            self.freq_bands = 2 ** torch.linspace(0, N_freqs - 1, N_freqs)
         else:
-            self.freq_bands = torch.linspace(1, 2**(N_freqs-1), N_freqs)
+            self.freq_bands = torch.linspace(1, 2 ** (N_freqs - 1), N_freqs)
 
     def forward(self, x):
         """
@@ -106,13 +104,21 @@ class Embedding(nn.Module):
             out = []
         for freq in self.freq_bands:
             for func in self.funcs:
-                out += [func(freq*x)]
+                out += [func(freq * x)]
 
         return torch.cat(out, -1)
 
 
 class AnnealedEmbedding(nn.Module):
-    def __init__(self, in_channels, N_freqs, annealed_step, annealed_begin_step=0, logscale=True, identity=True):
+    def __init__(
+        self,
+        in_channels,
+        N_freqs,
+        annealed_step,
+        annealed_begin_step=0,
+        logscale=True,
+        identity=True,
+    ):
         """
         Defines a function that embeds x to (x, sin(2^k x), cos(2^k x), ...)
         in_channels: number of input channels (3 for both xyz and direction)
@@ -124,14 +130,14 @@ class AnnealedEmbedding(nn.Module):
         self.annealed_step = annealed_step
         self.annealed_begin_step = annealed_begin_step
         self.funcs = [torch.sin, torch.cos]
-        self.out_channels = in_channels*(len(self.funcs)*N_freqs+1)
-        self.index = torch.linspace(0, N_freqs-1, N_freqs)
+        self.out_channels = in_channels * (len(self.funcs) * N_freqs + 1)
+        self.index = torch.linspace(0, N_freqs - 1, N_freqs)
         self.identity = identity
 
         if logscale:
-            self.freq_bands = 2**torch.linspace(0, N_freqs-1, N_freqs)
+            self.freq_bands = 2 ** torch.linspace(0, N_freqs - 1, N_freqs)
         else:
-            self.freq_bands = torch.linspace(1, 2**(N_freqs-1), N_freqs)
+            self.freq_bands = torch.linspace(1, 2 ** (N_freqs - 1), N_freqs)
 
     def forward(self, x, step):
         """
@@ -157,20 +163,24 @@ class AnnealedEmbedding(nn.Module):
             if step <= self.annealed_begin_step:
                 alpha = 0
             else:
-                alpha = self.N_freqs * (step - self.annealed_begin_step) / float(
-                    self.annealed_step)
+                alpha = (
+                    self.N_freqs
+                    * (step - self.annealed_begin_step)
+                    / float(self.annealed_step)
+                )
 
         for j, freq in enumerate(self.freq_bands):
-            w = (1 - torch.cos(
-                math.pi * torch.clamp(alpha - self.index[j], 0, 1))) / 2
+            w = (1 - torch.cos(math.pi * torch.clamp(alpha - self.index[j], 0, 1))) / 2
             for func in self.funcs:
-                out += [w * func(freq*x)]
+                out += [w * func(freq * x)]
 
         return torch.cat(out, -1)
 
 
 class AnnealedHash(nn.Module):
-    def __init__(self, in_channels, annealed_step, annealed_begin_step=0, identity=True):
+    def __init__(
+        self, in_channels, annealed_step, annealed_begin_step=0, identity=True
+    ):
         """
         Defines a function that embeds x to (x, sin(2^k x), cos(2^k x), ...)
         in_channels: number of input channels (3 for both xyz and direction)
@@ -207,10 +217,21 @@ class AnnealedHash(nn.Module):
             if step <= self.annealed_begin_step:
                 alpha = 0
             else:
-                alpha = self.N_freqs * (step - self.annealed_begin_step) / float(
-                    self.annealed_step)
+                alpha = (
+                    self.N_freqs
+                    * (step - self.annealed_begin_step)
+                    / float(self.annealed_step)
+                )
 
-        w = (1 - torch.cos(math.pi * torch.clamp(alpha * torch.ones_like(self.index_2) - self.index_2, 0, 1))) / 2
+        w = (
+            1
+            - torch.cos(
+                math.pi
+                * torch.clamp(
+                    alpha * torch.ones_like(self.index_2) - self.index_2, 0, 1
+                )
+            )
+        ) / 2
 
         out = x_embed * w.to(x_embed.device)
 
@@ -218,12 +239,15 @@ class AnnealedHash(nn.Module):
 
 
 class ImplicitVideo(nn.Module):
-    def __init__(self,
-                 D=8, W=256,
-                 in_channels_xyz=34,
-                 skips=[4],
-                 out_channels=3,
-                 sigmoid_offset=0):
+    def __init__(
+        self,
+        D=8,
+        W=256,
+        in_channels_xyz=34,
+        skips=[4],
+        out_channels=3,
+        sigmoid_offset=0,
+    ):
         """
         D: number of layers for density (sigma) encoder
         W: number of hidden units in each layer
@@ -247,7 +271,7 @@ class ImplicitVideo(nn.Module):
             if i == 0:
                 layer = nn.Linear(self.in_channels_xyz, W)
             elif i in skips:
-                layer = nn.Linear(W+self.in_channels_xyz, W)
+                layer = nn.Linear(W + self.in_channels_xyz, W)
             else:
                 layer = nn.Linear(W, W)
             init_weights(layer)
@@ -297,12 +321,12 @@ class ImplicitVideo(nn.Module):
 class ImplicitVideo_Hash(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.encoder = tcnn.Encoding(n_input_dims=2,
-                                     encoding_config=config["encoding"])
-        self.decoder = tcnn.Network(n_input_dims=self.encoder.n_output_dims +
-                                    2,
-                                    n_output_dims=3,
-                                    network_config=config["network"])
+        self.encoder = tcnn.Encoding(n_input_dims=2, encoding_config=config["encoding"])
+        self.decoder = tcnn.Network(
+            n_input_dims=self.encoder.n_output_dims + 2,
+            n_output_dims=3,
+            network_config=config["network"],
+        )
 
     def forward(self, x):
         input = x
@@ -316,17 +340,20 @@ class ImplicitVideo_Hash(nn.Module):
 class Deform_Hash3d(nn.Module):
     def __init__(self, config):
         super().__init__()
-        self.encoder = tcnn.Encoding(n_input_dims=3,
-                                     encoding_config=config["encoding_deform3d"])
-        self.decoder = tcnn.Network(n_input_dims=self.encoder.n_output_dims + 3,
-                                    n_output_dims=2,
-                                    network_config=config["network_deform"])
+        self.encoder = tcnn.Encoding(
+            n_input_dims=3, encoding_config=config["encoding_deform3d"]
+        )
+        self.decoder = tcnn.Network(
+            n_input_dims=self.encoder.n_output_dims + 3,
+            n_output_dims=2,
+            network_config=config["network_deform"],
+        )
 
     def forward(self, x, step=0, aneal_func=None):
         input = x
         input = self.encoder(input)
         if aneal_func is not None:
-            input = torch.cat([x, aneal_func(input,step)], dim=-1)
+            input = torch.cat([x, aneal_func(input, step)], dim=-1)
         else:
             input = torch.cat([x, input], dim=-1)
 
@@ -341,7 +368,7 @@ class Deform_Hash3d_Warp(nn.Module):
         super().__init__()
         self.Deform_Hash3d = Deform_Hash3d(config)
 
-    def forward(self, xyt_norm, step=0,aneal_func=None):
-        x = self.Deform_Hash3d(xyt_norm,step=step, aneal_func=aneal_func)
+    def forward(self, xyt_norm, step=0, aneal_func=None):
+        x = self.Deform_Hash3d(xyt_norm, step=step, aneal_func=aneal_func)
 
         return x

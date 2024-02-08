@@ -12,9 +12,19 @@ import numpy as np
 
 # File extensions regarding images (not including GIFs).
 IMAGE_EXTENSIONS = (
-    '.bmp', '.ppm', '.pgm', '.jpeg', '.jpg', '.jpe', '.jp2', '.png', '.webp',
-    '.tiff', '.tif'
+    ".bmp",
+    ".ppm",
+    ".pgm",
+    ".jpeg",
+    ".jpg",
+    ".jpe",
+    ".jp2",
+    ".png",
+    ".webp",
+    ".tiff",
+    ".tif",
 )
+
 
 def check_file_ext(filename, *ext_list):
     """Checks whether the given filename is with target extension(s).
@@ -31,7 +41,7 @@ def check_file_ext(filename, *ext_list):
     """
     if len(ext_list) == 0:
         return False
-    ext_list = [ext if ext.startswith('.') else '.' + ext for ext in ext_list]
+    ext_list = [ext if ext.startswith(".") else "." + ext for ext in ext_list]
     ext_list = [ext.lower() for ext in ext_list]
     basename = os.path.basename(filename)
     ext = os.path.splitext(basename)[1].lower()
@@ -143,14 +153,16 @@ def resize_image(image, *args, **kwargs):
     return cv2.resize(image, *args, **kwargs)
 
 
-def add_text_to_image(image,
-                      text='',
-                      position=None,
-                      font=cv2.FONT_HERSHEY_TRIPLEX,
-                      font_size=1.0,
-                      line_type=cv2.LINE_8,
-                      line_width=1,
-                      color=(255, 255, 255)):
+def add_text_to_image(
+    image,
+    text="",
+    position=None,
+    font=cv2.FONT_HERSHEY_TRIPLEX,
+    font_size=1.0,
+    line_type=cv2.LINE_8,
+    line_width=1,
+    color=(255, 255, 255),
+):
     """Overlays text on given image.
 
     NOTE: The input image is assumed to be with `RGB` channel order.
@@ -174,15 +186,17 @@ def add_text_to_image(image,
         return image
 
     _check_2d_image(image)
-    cv2.putText(img=image,
-                text=text,
-                org=position,
-                fontFace=font,
-                fontScale=font_size,
-                color=color,
-                thickness=line_width,
-                lineType=line_type,
-                bottomLeftOrigin=False)
+    cv2.putText(
+        img=image,
+        text=text,
+        org=position,
+        fontFace=font,
+        fontScale=font_size,
+        color=color,
+        thickness=line_width,
+        lineType=line_type,
+        bottomLeftOrigin=False,
+    )
     return image
 
 
@@ -254,7 +268,7 @@ def parse_image_size(obj):
     Raises:
         If the input is invalid, i.e., neither a list or tuple, nor a string.
     """
-    if obj is None or obj == '':
+    if obj is None or obj == "":
         height = 0
         width = 0
     elif isinstance(obj, int):
@@ -262,7 +276,7 @@ def parse_image_size(obj):
         width = obj
     elif isinstance(obj, (list, tuple, str, np.ndarray)):
         if isinstance(obj, str):
-            splits = obj.replace(' ', '').split(',')
+            splits = obj.replace(" ", "").split(",")
             numbers = tuple(map(int, splits))
         else:
             numbers = tuple(obj)
@@ -276,9 +290,9 @@ def parse_image_size(obj):
             height = int(numbers[0])
             width = int(numbers[1])
         else:
-            raise ValueError('At most two elements for image size.')
+            raise ValueError("At most two elements for image size.")
     else:
-        raise ValueError(f'Invalid type of input: `{type(obj)}`!')
+        raise ValueError(f"Invalid type of input: `{type(obj)}`!")
 
     return (max(0, height), max(0, width))
 

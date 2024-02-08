@@ -4,17 +4,17 @@ import cv2
 from glob import glob
 from tqdm import tqdm
 
-root_dir = '/home/xxx/code/CoDeF/all_sequences'
-name = 'beauty_1'
+root_dir = "/root/CoDeF/all_sequences"
+name = "heygen"
 
-msk_folder = f'{root_dir}/{name}/{name}_masks'
-img_folder = f'{root_dir}/{name}/{name}'
-frg_mask_folder = f'{root_dir}/{name}/{name}_masks_0'
-bkg_mask_folder = f'{root_dir}/{name}/{name}_masks_1'
+msk_folder = f"{root_dir}/{name}/{name}_masks"
+img_folder = f"{root_dir}/{name}/{name}"
+frg_mask_folder = f"{root_dir}/{name}/{name}_masks_0"
+bkg_mask_folder = f"{root_dir}/{name}/{name}_masks_1"
 os.makedirs(frg_mask_folder, exist_ok=True)
 os.makedirs(bkg_mask_folder, exist_ok=True)
 
-files = glob(msk_folder + '/*.png')
+files = glob(msk_folder + "/*.png")
 num = len(files)
 
 for i in tqdm(range(num)):

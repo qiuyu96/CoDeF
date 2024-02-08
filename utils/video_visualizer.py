@@ -9,13 +9,15 @@ from .image_utils import list_images_from_dir
 class VideoVisualizer(object):
     """Defines the video visualizer that presents images as a video."""
 
-    def __init__(self,
-                 path=None,
-                 frame_size=None,
-                 fps=25.0,
-                 codec='libx264',
-                 pix_fmt='yuv420p',
-                 crf=1):
+    def __init__(
+        self,
+        path=None,
+        frame_size=None,
+        fps=25.0,
+        codec="libx264",
+        pix_fmt="yuv420p",
+        crf=1,
+    ):
         """Initializes the video visualizer.
 
         Args:
@@ -53,11 +55,11 @@ class VideoVisualizer(object):
         """Sets the FPS (frame per second) of the video."""
         self.fps = fps
 
-    def set_codec(self, codec='libx264'):
+    def set_codec(self, codec="libx264"):
         """Sets the video codec."""
         self.codec = codec
 
-    def set_pix_fmt(self, pix_fmt='yuv420p'):
+    def set_pix_fmt(self, pix_fmt="yuv420p"):
         """Sets the video pixel format."""
         self.pix_fmt = pix_fmt
 
@@ -71,11 +73,11 @@ class VideoVisualizer(object):
         assert self.frame_width > 0
 
         video_setting = {
-            '-r': f'{self.fps:.2f}',
-            '-s': f'{self.frame_width}x{self.frame_height}',
-            '-vcodec': f'{self.codec}',
-            '-crf': f'{self.crf}',
-            '-pix_fmt': f'{self.pix_fmt}',
+            "-r": f"{self.fps:.2f}",
+            "-s": f"{self.frame_width}x{self.frame_height}",
+            "-vcodec": f"{self.codec}",
+            "-crf": f"{self.crf}",
+            "-pix_fmt": f"{self.pix_fmt}",
         }
         self.video = FFmpegWriter(self.path, outputdict=video_setting)
 
@@ -126,14 +128,13 @@ class VideoVisualizer(object):
             self.set_path(None)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     from glob import glob
     import cv2
-    video_visualizer = VideoVisualizer(path='output.mp4',
-                                       frame_size=None,
-                                       fps=25.0)
-    img_folder = 'src_images/'
-    imgs = sorted(glob(img_folder + '/*.png'))
+
+    video_visualizer = VideoVisualizer(path="output.mp4", frame_size=None, fps=25.0)
+    img_folder = "src_images/"
+    imgs = sorted(glob(img_folder + "/*.png"))
     for img in imgs:
         image = cv2.imread(img)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

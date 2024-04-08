@@ -1,0 +1,26 @@
+mask_dir: null
+flow_dir: null
+
+img_wh: [1080, 1080]
+canonical_wh: [1080, 1080]
+
+lr: 0.001
+bg_loss: 0.0
+
+ref_idx: null # 0
+
+N_xyz_w: [8, 8]
+flow_loss: 1
+flow_step: -1
+self_bg: False
+
+deform_hash: True
+vid_hash: True
+
+num_steps: 200000
+decay_step: [2500, 5000, 7500]
+annealed_begin_step: 4000
+annealed_step: 4000
+save_model_iters: 2000
+
+fps: 25

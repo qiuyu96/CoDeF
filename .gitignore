@@ -47,3 +47,5 @@ all_sequences/
 ckpts/
 logs/
 # configs/
+
+*.mp4

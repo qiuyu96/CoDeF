@@ -1,6 +1,6 @@
-NAME=beauty_1
-ROOT_DIR=/home/xxx/code/CoDeF/all_sequences
-CODE_DIR=/home/xxx/code/CoDeF/data_preprocessing/RAFT
+NAME=heygen
+ROOT_DIR=/root/CoDeF/all_sequences
+CODE_DIR=/root/CoDeF/data_preprocessing/RAFT
 
 IMG_DIR=$ROOT_DIR/${NAME}/${NAME}
 FLOW_DIR=$ROOT_DIR/${NAME}/${NAME}_flow

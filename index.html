@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CoDeF</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+  <!-- <link rel="icon" href="./static/images/favicon.svg"> -->
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/video_comparison.js"></script>
+
+</head>
+<body>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">CoDeF: Content Deformation Fields for Temporally Consistent Video Processing</h1>
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ken-ouyang.github.io/">Hao Ouyang</a><sup>1,2*</sup>,</span>
+            <span class="author-block">
+              <a href="https://github.com/qiuyu96">Qiuyu Wang</a><sup>2*</sup>,</span>
+            <span class="author-block">
+              <a href="https://henry123-boy.github.io/">Yuxi Xiao</a><sup>2,3*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=xUMjxi4AAAAJ">Qingyan Bai</a><sup>1,2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://github.com/JordanZh">Juntao Zhang</a><sup>1</sup>,
+            </span>
+			      <span class="author-block">
+              <a href="https://scholar.google.com/citations?user=hMDQifQAAAAJ">Kecheng Zheng</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://xzhou.me/">Xiaowei Zhou</a><sup>3</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://cqf.io/">Qifeng Chen</a><sup>1†</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://shenyujun.github.io/">Yujun Shen</a><sup>2†</sup>
+            </span>
+          </div>
+		
+		
+		  <div class="is-size-5 publication-authors">
+		    <span class="author-block"><sup>1</sup>HKUST</span>&ensp;
+            <span class="author-block"><sup>2</sup>Ant Group</span>&ensp;
+            <span class="author-block"><sup>3</sup>CAD&CG, ZJU</span>
+          </div>
+          <div class="is-size-3 publication-authors">
+            <span class="author-block">CVPR 2024 Highlight</span>
+          </div>
+            <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href="https://arxiv.org/abs/2308.07926"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/qiuyu96/CoDeF"
+                    class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+              <!-- Video Link. -->
+              <span class="link-block">
+                <a href="https://ezioby.github.io/CoDeF_Demo/"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-youtube"></i>
+                  </span>
+                  <span>High-Res Video</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Begin teaser video. -->
+<!-- Translation. -->
+<div class="columns is-centered has-text-centered">
+  <h2 class="title is-3">Video Translation</h2>
+</div>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div>
+          <video class="video" id="Teaser"  width="50%"  loop playsinline autoPlay muted src="./static/video_demos_compressed/teaser/teaser.mp4" onplay="resizeAndPlay(this)"></video>
+          <canvas width="150" height="150" class="videoMerge" id="TeaserMerge"></canvas>
+    </div>
+    <div class="hero-body">
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Consistent</span> <span class="dnerf">Video</span> <span class="dnerf">Translation</span> with the learned canonical image and deformation. 
+        Slide for comparison. For all the demos, the inputs are provided on the left.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+  <!-- Begin gallery. -->
+<section class="hero is-light is-small">
+  <div class="hero-body">
+    <div class="columns is-centered">
+      <div class="column is-full-width">
+        <br/>
+      </div>
+    </div>
+	 <!-- Begin gallery-1. -->
+    <div class="container">
+      <div id="results-carousel1" class="carousel results-carousel">
+        <div class="item g11">
+          <video poster="" id="g11" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/tifa.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g12">
+          <video poster="" id="g12" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/rainbow.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g13">
+          <video poster="" id="g13" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/beauty_1_base_transformed_dual(1).mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g14">
+          <video poster="" id="g14" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/beauty_1_base_transformed_dual(2).mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+		    <div class="item g15">
+          <video poster="" id="g15" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/beauty_0_base_video_hash_transformed_dual(1).mp4"
+                    type="video/mp4">
+        </video>
+        </div>
+        <div class="item g16">
+          <video poster="" id="g16" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x540/beauty_0_base_video_hash_transformed_dual(2).mp4"
+                    type="video/mp4">
+        </video>
+        </div>
+      </div>
+    </div>
+
+   	 <!-- Begin gallery-2. -->
+    <div class="container">
+      <div id="results-carousel2" class="carousel results-carousel">
+        <div class="item g21">
+          <video poster="" id="g21" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x960/scene_1_base_transformed_dual.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g22">
+          <video poster="" id="g22" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x960/dog.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g23">
+          <video poster="" id="g23" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x960/smoke_colorful.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g24">
+          <video poster="" id="g24" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1080x960/smoke_ink.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+    <!-- Begin gallery-3. -->
+    <div class="container">
+      <div id="results-carousel3" class="carousel results-carousel">
+        <div class="item g31">
+          <video poster="" id="g31" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/long_season.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g32">
+          <video poster="" id="g32" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/scene_3_base_transformed_dual.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g33">
+          <video poster="" id="g33" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/titanic.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g34">
+          <video poster="" id="g34" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/lemon_earth.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g35">
+          <video poster="" id="g35" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/cloud_atlas4_base_transformed_dual.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+        <div class="item g36">
+          <video poster="" id="g36" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/video_demos_compressed/1920x540/diamond_1_base_transformed_dual.mp4"
+                    type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<!-- End gallery. -->
+
+  <br>
+  <!-- Begin video slider. -->
+<div class="container is-max-desktop">
+  <div class="columns is-centered">
+    <div class="column is-two-fifths">
+      <div>
+        <video class="video" id="FinalSlider"  width="50%"  loop playsinline autoPlay muted src="./static/video_demos_compressed/slider/slider.mp4" onplay="resizeAndPlay(this)"></video>
+        <canvas width="150" height="150" class="videoMerge" id="FinalSliderMerge"></canvas> 
+      </div>
+  <br>Left: The input.  Right: The synthesized video by CoDeF with the prompt "Chinese ink painting".
+      <br/>
+    </div>
+  </div>
+</div>
+  <!-- End video slider -->
+<br>
+<!-- End teaser video. -->
+
+
+<!-- Begin abstract -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <img src='static/images/framework.png' id="framework"><br><br>
+        <div class="content has-text-justified">
+          <p>
+            We present the content deformation field (CoDeF) as a new type of video representation,
+            which consists of a <b>canonical content field</b> aggregating the static contents in the entire video 
+            and a <b>temporal deformation field</b> recording the transformations from the canonical image
+            (<i>i.e.</i>, rendered from the canonical content field) to each individual frame along the time axis.
+            Given a target video, these two fields are jointly optimized to reconstruct it through a carefully tailored rendering pipeline.
+
+            We advisedly introduce some regularizations into the optimization process, 
+            urging the canonical content field to inherit semantics (<i>e.g.</i>, the object shape) from the video.
+          </p>
+          <p>
+            With such a design, CoDeF naturally supports lifting image algorithms for video processing, 
+            in the sense that one can apply an image algorithm to the canonical image 
+            and effortlessly propagate the outcomes to the entire video with the aid of the temporal deformation field.
+
+            We experimentally show that CoDeF is able to lift image-to-image translation to video-to-video translation 
+            and lift keypoint detection to keypoint tracking without any training.
+
+            More importantly, thanks to our lifting strategy that deploys the algorithms on only one image, 
+            we achieve superior cross-frame consistency in processed videos compared to existing video-to-video translation approaches, 
+            and even manage to track non-rigid objects like water and smog.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<br><br>
+<!-- End abstract -->
+
+
+<!-- Other applications. -->
+<div class="columns is-centered has-text-centered">
+  <h2 class="title is-3">Other Applications</h2><br>
+</div>
+<!-- Point-based Tracking. -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video id="teaser_tracking" autoplay muted loop playsinline height="100%">
+        <source src="./static/video_demos_compressed/teaser/tracking_zoom.mp4"
+                type="video/mp4">
+      </video>
+
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Point-based Tracking</span> with the learned canonical image and deformation.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Segmentation-based Tracking. -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div>
+          <video class="video" id="SegTrack" width="60%" loop playsinline autoPlay muted src="./static/video_demos_compressed/teaser/segtrack.mp4" onplay="resizeAndPlay(this)"></video>
+          <canvas width="150" height="150" class="videoMerge" id="SegTrackMerge"></canvas>
+    </div>
+    <div class="hero-body">
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Segmentation-based Tracking</span>. The segmentation mask is acquired based on the learned canonical image and propagated to the sequence. Slide for better visualization.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Super-resolution. -->
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div>
+          <video class="video" id="Superres" width="60%" loop playsinline autoPlay muted src="./static/video_demos_compressed/teaser/cloud_atlas_SR_dual.mp4" onplay="resizeAndPlay(this)"></video>
+          <canvas width="150" height="150" class="videoMerge" id="SuperresMerge"></canvas>
+    </div>
+    <div class="hero-body">
+      <h2 class="subtitle has-text-centered">
+        <span class="dnerf">Video</span> <span class="dnerf">Super-resolution</span> with the learned canonical image and deformation. 
+        Slide for comparison.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<!-- <section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{park2021nerfies,
+  author    = {Park, Keunhong and Sinha, Utkarsh and Barron, Jonathan T. and Bouaziz, Sofien and Goldman, Dan B and Seitz, Steven M. and Martin-Brualla, Ricardo},
+  title     = {Nerfies: Deformable Neural Radiance Fields},
+  journal   = {ICCV},
+  year      = {2021},
+}</code></pre>
+  </div>
+</section> -->
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <a class="icon-link"
+         href="./static/videos/nerfies_paper.pdf">
+        <i class="fas fa-file-pdf"></i>
+      </a>
+      <a class="icon-link" href="https://github.com/keunhong" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="content has-text-centered">
+        <div class="content">
+          <p>
+            This website was modified from <a
+            href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>. We appreciate for sharing this perfect template!
+          </p>
+        </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+bulmaCarousel.attach('#results-carousel1', {
+    slidesToScroll: 1,
+    slidesToShow: 2,
+    infinite: true,
+    autoplay: false,
+});
+bulmaCarousel.attach('#results-carousel2', {
+    slidesToScroll: 1,
+    slidesToShow: 2,
+    infinite: true,
+    autoplay: false,
+});
+bulmaCarousel.attach('#results-carousel3', {
+    slidesToScroll: 1,
+    slidesToShow: 1,
+    infinite: true,
+    autoplay: false,
+});
+</script>
+
+</body>
+</html>
+ 
